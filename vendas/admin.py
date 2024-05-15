@@ -1,3 +1,16 @@
 from django.contrib import admin
+from . import models
 
-# Register your models here.
+class ListaItens(admin.TabularInline):
+    model = models.ItemDaVenda
+    extra = 1
+
+
+class VendaAdmin(admin.ModelAdmin):
+    inlines = [
+        ListaItens
+    ]
+
+admin.site.register(models.Venda, VendaAdmin)
+admin.site.register(models.ItemDaVenda)
+
