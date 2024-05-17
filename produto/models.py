@@ -11,9 +11,8 @@ class Produto(models.Model):
     quantidade = models.IntegerField(default=1)
     preco_compra = models.FloatField(verbose_name='Preço Compra:')
     preco_venda = models.FloatField(verbose_name='Preço Venda:')
-    preco_marketing_promocional = models.FloatField(
-        default=0, blank=True, null=True, verbose_name='Preço Promoção:')
-    descricao_curta = models.TextField(max_length=255, blank=True, null=True)
+    preco_promocional = models.FloatField(blank=True, null=True, verbose_name='Preço Promoção:')
+    descricao = models.TextField(max_length=255, blank=True, null=True, verbose_name='Descrição:')
     slug = models.SlugField(unique=True, blank=True, null=True)
     
     def save(self, *args, **kwargs):

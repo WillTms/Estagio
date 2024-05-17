@@ -12,13 +12,13 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">{{produto.nome}}</h5>
-                    <p class="card-text">{{produto.descricao_curta}}</p>
+                    <p class="card-text">{{produto.descricao}}</p>
                     <div class="container product-price-block text-center">
                         <span class="product-price">
-                            {{produto.preco_venda}}
+                            {{produto.preco_venda|formata_preco}}
                         </span>
                         <span class="product-old text-muted">
-                            {{produto.preco_marketing_promocional}}
+                            {{produto.preco_promocional}}
                         </span>
                     </div>
                 </div>
