@@ -15,6 +15,8 @@ class Produto(models.Model):
     descricao = models.TextField(max_length=255, blank=True, null=True, verbose_name='Descrição:')
     slug = models.SlugField(unique=True, blank=True, null=True)
     
+
+
     def save(self, *args, **kwargs):
         if not self.slug:
             slug = f'{slugify(self.nome)}'
