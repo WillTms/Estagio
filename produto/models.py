@@ -7,7 +7,6 @@ from django.utils.text import slugify
 
 
 class Produto(models.Model):
-    id_produto = models.AutoField()
     nome = models.CharField(max_length=255)
     quantidade = models.IntegerField(default=1)
     preco_compra = models.FloatField(verbose_name='Preço Compra:')
