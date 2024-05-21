@@ -7,6 +7,7 @@ from django.utils.text import slugify
 
 
 class Produto(models.Model):
+    id_produto = models.AutoField()
     nome = models.CharField(max_length=255)
     quantidade = models.IntegerField(default=1)
     preco_compra = models.FloatField(verbose_name='Preço Compra:')
@@ -15,7 +16,14 @@ class Produto(models.Model):
     descricao = models.TextField(max_length=255, blank=True, null=True, verbose_name='Descrição:')
     slug = models.SlugField(unique=True, blank=True, null=True)
     
-
+    def auto(self, *args, **kwargs):
+        if self.numero_serie is None:
+            max_numero_serie = Produto.objects.aggregate(models.Max('numero_serie'))['numero_serie__max']
+            if max_numero_serie is not None:
+                self.numero_serie = max_numero_serie + 1
+            else:
+                self.numero_serie = 1
+        super().save(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         if not self.slug:

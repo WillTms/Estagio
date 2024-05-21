@@ -6,23 +6,30 @@ from django.http import HttpResponse
 from .models import Produto
 from django.urls import reverse_lazy
 from django.http import JsonResponse
+from django.db import models
+from django.db.models import Q
 
-'''def AdicionarProduto(request):
-    form = ProdutosForm(request.POST or None, request.FILES or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            return redirect('homepage')
-    return render(request, 'novo_produto.html', {'form': form})
-'''
+
 
 class Lista(ListView):
   model = Produto
+  template_name = 'produto_list.html'
+  context_object_name = 'produto_list'
+
+  def get_queryset(self):
+        query = self.request.GET.get('busca')
+        if query:
+            return Produto.objects.filter(Q(nome__icontains=query))
+        return Produto.objects.all()
+
 
 class AdicionarProduto(CreateView):
   model = Produto
   fields = ['nome', 'quantidade', 'preco_compra', 'preco_venda', 'preco_promocional', 'descricao','slug']
   success_url = reverse_lazy('produto:listaproduto')
+  
+  def form_valid(self, form):
+        return super().form_valid(form)
 
 class EditarProduto(UpdateView):
   model = Produto
