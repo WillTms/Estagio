@@ -1,0 +1,24 @@
+.custom-form {
+    max-width: 1000px; /* Aumentando a largura máxima */
+    margin: auto;
+    padding: 10px; /* Aumentando o espaçamento interno */
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.custom-form h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.custom-form .form-row {
+    margin-bottom: -10px; /* Aumentando o espaçamento entre as linhas */
+}
+.custom-form .form-group {
+    padding: 0 10px; /* Aumentando o espaçamento interno */
+}
+.custom-form button[type="submit"] {
+    width: 100%;
+}
+.form-control {
+    height: 38px; /* Aumentando a altura dos campos de formulário */
+}

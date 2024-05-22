@@ -19,8 +19,8 @@ class Lista(ListView):
   def get_queryset(self):
         query = self.request.GET.get('busca')
         if query:
-            return Produto.objects.filter(Q(nome__icontains=query))
-        return Produto.objects.all()
+            return Produto.objects.filter(Q(nome__icontains=query)).order_by('id')
+        return Produto.objects.all().order_by('id')
 
 
 class AdicionarProduto(CreateView):
@@ -28,6 +28,7 @@ class AdicionarProduto(CreateView):
   fields = ['nome', 'quantidade', 'preco_compra', 'preco_venda', 'preco_promocional', 'descricao','slug']
   success_url = reverse_lazy('produto:listaproduto')
   
+
   def form_valid(self, form):
         return super().form_valid(form)
 
