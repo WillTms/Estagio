@@ -44,8 +44,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     
-    
-    
     # TODO: Remover debug toolbar
     'debug_toolbar'
     

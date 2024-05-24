@@ -19,8 +19,21 @@ class Lista(ListView):
   def get_queryset(self):
         query = self.request.GET.get('busca')
         if query:
-            return Produto.objects.filter(Q(nome__icontains=query)).order_by('id')
-        return Produto.objects.all().order_by('id')
+            return Produto.objects.filter(Q(nome__icontains=query), estado=True).order_by('id')
+        return Produto.objects.filter(estado=True).order_by('id')
+
+class ExcluirProduto(View):
+    success_url = reverse_lazy('produto:listaproduto')
+
+    def post(self, request, *args, **kwargs):
+        produto_id = kwargs.get('pk')
+        produto = Produto.objects.get(id=produto_id)
+        produto.estado= False
+        produto.save()
+        return JsonResponse({'success': True})
+    
+    def get(self, request, *args, **kwargs):
+        return redirect(self.success_url) 
 
 
 class AdicionarProduto(CreateView):
@@ -37,7 +50,8 @@ class EditarProduto(UpdateView):
   fields = ['nome', 'quantidade', 'preco_compra', 'preco_venda', 'preco_promocional', 'descricao','slug']
   success_url = reverse_lazy('produto:listaproduto')  
   
-class ExcluirProduto(DeleteView):
+  '''
+  class ExcluirProduto(DeleteView):
   model = Produto
   success_url = reverse_lazy('produto:listaproduto')
 
@@ -48,6 +62,15 @@ class ExcluirProduto(DeleteView):
     
   def get(self, request, *args, **kwargs):
       return redirect(self.success_url) 
+'''
+  
+
+
+
+
+
+
+
 
 
 
@@ -58,8 +81,7 @@ class ExcluirProduto(DeleteView):
       model = models.Produto
       template_name = 'produto/lista.html'
       context_object_name = 'produtos'    
-   """ 
-
+  
 class DetalheProdutos(View):
       def get(self, *args, **kwargs):
         return HttpResponse('detalhe produto')
@@ -79,3 +101,5 @@ class CarrinhoVenda(View):
 class Finalizar(View):
       def get(self, *args, **kwargs):
         return HttpResponse('finalizar')
+      
+      """

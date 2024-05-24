@@ -48,8 +48,9 @@
                     {{ form.slug|as_crispy_field }}
                 </div>
             </div>
-            <div class="justify-content-between">
-                <button type="submit" class="btn btn-success mt-4" style="height: 40px; width: 100px;">Confirmar</button>
+            <div class="d-flex justify-content-end mt-4">
+                <button type="button" class="btn btn-outline-success me-2" style="height: 40px; width: 100px;" onclick="window.history.back();">Voltar</button>
+                <button type="submit" class="btn btn-success" style="height: 40px; width: 100px;">Confirmar</button>
             </div>            
         </form>
     </div>
@@ -59,3 +60,4 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+

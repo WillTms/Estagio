@@ -1,9 +1,6 @@
-#from django.conf import settings
-#import os
-#from PIL import Image
 from django.db import models
 from django.utils.text import slugify
-#from utils import utils
+
 
 
 class Produto(models.Model):
@@ -14,6 +11,7 @@ class Produto(models.Model):
     preco_promocional = models.FloatField(blank=True, null=True, verbose_name='Preço Promoção:')
     descricao = models.TextField(max_length=255, blank=True, null=True, verbose_name='Descrição:')
     slug = models.SlugField(unique=True, blank=True, null=True, verbose_name='Slug:')
+    estado = models.BooleanField(default=True)
     
 
     def save(self, *args, **kwargs):
