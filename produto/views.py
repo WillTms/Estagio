@@ -11,6 +11,31 @@ from django.db.models import Q
 
 
 
+class AdicionarProduto(CreateView):
+  model = Produto
+  fields = ['nome', 'quantidade', 'preco_compra', 'preco_venda', 'preco_promocional', 'descricao','slug']
+  success_url = reverse_lazy('produto:listaproduto')
+  
+  def form_valid(self, form):
+        if form.cleaned_data['quantidade'] < 0:
+            form.add_error('quantidade', 'O valor não pode ser negativo.')
+            return self.form_invalid(form)
+        
+        if form.cleaned_data['preco_compra'] < 0:
+            form.add_error('preco_compra', 'O valor não pode ser negativo.')
+            return self.form_invalid(form)
+        
+        if form.cleaned_data['preco_venda'] < 0:
+            form.add_error('preco_venda', 'O valor não pode ser negativo.')
+            return self.form_invalid(form)
+        
+        if form.cleaned_data.get('preco_promocional') is not None and form.cleaned_data['preco_promocional'] < 0:
+            form.add_error('preco_promocional', 'O valor não pode ser negativo.')
+            return self.form_invalid(form)
+        
+        return super().form_valid(form)
+
+
 class Lista(ListView):
   model = Produto
   template_name = 'produto_list.html'
@@ -36,19 +61,31 @@ class ExcluirProduto(View):
         return redirect(self.success_url) 
 
 
-class AdicionarProduto(CreateView):
-  model = Produto
-  fields = ['nome', 'quantidade', 'preco_compra', 'preco_venda', 'preco_promocional', 'descricao','slug']
-  success_url = reverse_lazy('produto:listaproduto')
-  
 
-  def form_valid(self, form):
-        return super().form_valid(form)
 
 class EditarProduto(UpdateView):
   model = Produto
   fields = ['nome', 'quantidade', 'preco_compra', 'preco_venda', 'preco_promocional', 'descricao','slug']
-  success_url = reverse_lazy('produto:listaproduto')  
+  success_url = reverse_lazy('produto:listaproduto') 
+  
+  def form_valid(self, form):
+        if form.cleaned_data['quantidade'] < 0:
+            form.add_error('quantidade', 'O valor não pode ser negativo.')
+            return self.form_invalid(form)
+        
+        if form.cleaned_data['preco_compra'] < 0:
+            form.add_error('preco_compra', 'O valor não pode ser negativo.')
+            return self.form_invalid(form)
+        
+        if form.cleaned_data['preco_venda'] < 0:
+            form.add_error('preco_venda', 'O valor não pode ser negativo.')
+            return self.form_invalid(form)
+        
+        if form.cleaned_data.get('preco_promocional') is not None and form.cleaned_data['preco_promocional'] < 0:
+            form.add_error('preco_promocional', 'O valor não pode ser negativo.')
+            return self.form_invalid(form)
+        
+        return super().form_valid(form) 
   
   '''
   class ExcluirProduto(DeleteView):
