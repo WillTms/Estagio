@@ -1,10 +1,12 @@
 from django.urls import path 
 from . import views
+from clientes.views import AdicionarCliente,ListaClientes,EditarCliente,ExcluirCliente
 
 app_name = 'clientes'
 
 urlpatterns = [
-    path('criar/', views.Criar.as_view(), name='criar'),
-    path('editar/', views.Editar.as_view(), name='editar'),
-    path('excluir/', views.Excluir.as_view(), name='excluir'),
+    path('adicionarcliente/',AdicionarCliente.as_view(), name="adicionarcliente"),
+    path('listacliente/',ListaClientes.as_view(), name="listacliente"),
+    path("editarcliente/<int:pk>", EditarCliente.as_view(), name="editarcliente"),
+    path('excluircliente/<int:pk>', ExcluirCliente.as_view(), name='excluircliente'),
 ]
