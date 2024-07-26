@@ -1,0 +1,97 @@
+.custom-form {
+    max-width: 1000px;
+    /* Aumentando a largura máxima */
+    margin: auto;
+    padding: 10px;
+    /* Aumentando o espaçamento interno */
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+}
+
+.custom-form h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.custom-form .form-row {
+    margin-bottom: -10px;
+    /* Aumentando o espaçamento entre as linhas */
+}
+
+.custom-form .form-group {
+    padding: 0 10px;
+    /* Aumentando o espaçamento interno */
+}
+
+.custom-form button[type="submit"] {
+    width: 100%;
+}
+
+.form-control {
+    height: 38px;
+    /* Aumentando a altura dos campos de formulário */
+}
+
+body {
+    background-color: white;
+    /* Cor de fundo cinza */
+    font-family: var(--bs-body-font-family);
+    /* Fonte padrão */
+}
+
+.container {
+    max-width: 800px;
+    /* Largura máxima do container */
+    margin-top: 50px;
+    /* Espaçamento superior */
+    padding: 30px;
+    /* Espaçamento interno */
+    background-color: #f9f9f9;
+    /* Cor de fundo branca do formulário */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra suave */
+    border-radius: 8px;
+    /* Bordas arredondadas */
+}
+
+h1 {
+    color: #333;
+    /* Cor do texto do título */
+    margin-bottom: 30px;
+    /* Margem inferior */
+    text-align: center;
+    /* Alinhamento centralizado */
+}
+
+.form-group label {
+    color: #555;
+    /* Cor dos rótulos */
+}
+
+.form-control {
+    height: 45px;
+    /* Altura dos campos */
+    border-radius: 5px;
+    /* Bordas arredondadas */
+    border: 1px solid #ddd;
+    /* Cor da borda */
+}
+
+.form-control:focus {
+    border-color: #28a745;
+    /* Cor da borda ao focar */
+    box-shadow: none;
+    /* Remoção de sombra */
+}
+
+.form-row {
+    margin-bottom: 20px;
+    /* Espaçamento entre linhas do formulário */
+}
+
+.d-flex {
+    justify-content: flex-end;
+    /* Alinhamento dos botões à direita */
+}

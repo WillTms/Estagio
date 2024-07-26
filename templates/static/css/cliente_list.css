@@ -1,0 +1,17 @@
+h1{
+    text-align: left;
+    text-shadow: 2cm;
+}
+
+body {
+    background-color: #ececec; 
+  }
+
+.navbar-nav .nav-link {
+    color: white; 
+}
+
+.navbar-nav .nav-link:hover {
+      background-color: #ececec;
+      color: black !important; 
+}
