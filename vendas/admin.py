@@ -2,7 +2,7 @@ from django.contrib import admin
 from . import models
 
 class ListaItens(admin.TabularInline):
-    model = models.ItemDaVenda
+    model = models.ItensVenda
     extra = 1
 
 
@@ -12,5 +12,5 @@ class VendaAdmin(admin.ModelAdmin):
     ]
 
 admin.site.register(models.Venda, VendaAdmin)
-admin.site.register(models.ItemDaVenda)
+admin.site.register(models.ItensVenda)
 

@@ -1,20 +1,75 @@
-from django.shortcuts import render
-#from django.views.generic.list import ListView
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from django.http import HttpResponse
+from .models import Cliente, Produto, Venda, ItensVenda
+from django.views.generic.list import ListView
 
-class Pagar(View):
-    def get(self, *args, **kwargs):
-        return HttpResponse('pagar')
+class VendaListView(ListView):
+    model = Venda
+    template_name = 'vendas/vendas_list.html'
+    context_object_name = 'vendas'
+    ordering = ['-data_venda']
 
-class SalvarVenda(View):
-    def get(self, *args, **kwargs):
-        return HttpResponse('salvar venda')
+class VendaCreateView(View):
+    def get(self, request):
+        clientes = Cliente.objects.all()
+        produtos = Produto.objects.filter(estado=True)
+        return render(request, 'vendas/vendas_form.html', {
+            'clientes': clientes,
+            'produtos': produtos,
+        })
 
-class Detalhe(View):
-    def get(self, *args, **kwargs):
-        return HttpResponse('detalhe')
+    def post(self, request):
+        cliente_id = request.POST.get('cliente')
+        cliente = get_object_or_404(Cliente, id=cliente_id)
+        produtos = Produto.objects.filter(estado=True)
+        itens_venda = []
 
-class Lista(View):
-    def get(self, *args, **kwargs):
-        return HttpResponse('lista')
+        total = 0.0
+        for produto in produtos:
+            quantidade = int(request.POST.get(f'quantidade_{produto.id}', 0))
+            if quantidade > 0:
+                preco = produto.preco_venda  # Sempre usar o preco_venda
+                subtotal = quantidade * preco
+                item = {
+                    'produto': produto,
+                    'quantidade': quantidade,
+                    'preco': preco,
+                    'subtotal': subtotal
+                }
+                itens_venda.append(item)
+                total += subtotal
+
+        # Passa os detalhes da venda para o template de pré-visualização
+        return render(request, 'vendas/venda_preview.html', {
+            'cliente': cliente,
+            'itens_venda': itens_venda,
+            'total': total
+        })
+
+class VendaConfirmView(View):
+    def post(self, request):
+        cliente_id = request.POST.get('cliente_id')
+        cliente = get_object_or_404(Cliente, id=cliente_id)
+        venda = Venda(cliente=cliente)
+        venda.save()
+        
+        produtos = Produto.objects.filter(estado=True)
+        total = 0.0
+
+        for produto in produtos:
+            quantidade = int(request.POST.get(f'quantidade_{produto.id}', 0))
+            if quantidade > 0:
+                preco = produto.preco_venda  # Sempre usar o preco_venda
+                item_venda = ItensVenda(
+                    venda=venda,
+                    produto=produto,
+                    quantidade=quantidade,
+                    preco=preco
+                )
+                item_venda.save()
+                total += item_venda.get_subtotal()
+        
+        venda.total = total
+        venda.save()
+
+        return redirect('vendas:venda_create')

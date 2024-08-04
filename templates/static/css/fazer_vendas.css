@@ -1,0 +1,15 @@
+body {
+    background-color: #f8f9fa;
+}
+.container {
+    max-width: 1200px; /* Ajusta o tamanho da container para maior largura */
+}
+.table td, .table th {
+    vertical-align: middle; /* Centraliza verticalmente o conteúdo das células da tabela */
+}
+.form-select, .form-control {
+    min-width: 200px; /* Define uma largura mínima para os campos de formulário */
+}
+.form-label {
+    font-weight: bold; /* Deixa o texto dos labels em negrito */
+}

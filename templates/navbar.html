@@ -16,13 +16,14 @@
             <a class="nav-link text-white" href="{% url 'clientes:listacliente' %}">Clientes</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white" href="#">Fazer Venda</a>
+            <a class="nav-link text-white" href="{% url 'vendas:venda_create' %}">Fazer Venda</a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-white" href="#">Gerar Relatório</a>
           </li>
           <li class="nav-item d-flex align-items-center">
-            <a class="nav-link text-white" href="#">Arquivados</a>
+            <a class="nav-link text-white" href="{% url 'vendas:venda_list' %}">Histórico de Vendas</a>
+
             <form class="d-flex ms-3" method="GET" action="#">
               <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar" name="busca">
               <button class="btn btn-outline-light" type="submit">Pesquisar</button>
