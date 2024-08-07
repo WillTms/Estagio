@@ -1,13 +1,31 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
+from django.db.models import Sum
+from django.db.models.functions import TruncDate
 from .models import Cliente, Produto, Venda, ItensVenda
 from django.views.generic.list import ListView
 
-class VendaListView(ListView):
-    model = Venda
-    template_name = 'vendas/vendas_list.html'
-    context_object_name = 'vendas'
-    ordering = ['-data_venda']
+class VendaListView(View):
+    def get(self, request):
+        vendas_por_dia = (
+            Venda.objects
+            .annotate(data=TruncDate('data_venda'))
+            .values('data')
+            .annotate(total_dia=Sum('total'))
+            .order_by('-data')
+        )
+
+        vendas_detalhadas = (
+            Venda.objects
+            .annotate(data=TruncDate('data_venda'))
+            .order_by('-data_venda')
+        )
+
+        context = {
+            'vendas_por_dia': vendas_por_dia,
+            'vendas_detalhadas': vendas_detalhadas,
+        }
+        return render(request, 'vendas/vendas_list.html', context)
 
 class VendaCreateView(View):
     def get(self, request):

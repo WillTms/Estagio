@@ -11,13 +11,13 @@
 <body>
     {% include "navbar.html" %}
     <div class="container mt-4">
-        <h1>Nova Venda</h1>
+        <h1>Efetuar Venda</h1>
         <form method="post">
             {% csrf_token %}
             <div class="mb-3">
-                <label for="cliente" class="form-label">Cliente</label>
+                <label for="cliente" class="form-label">Cliente referente a venda</label>
                 <select class="form-select" id="cliente" name="cliente" required>
-                    <option value="" disabled selected>Selecione um cliente</option>
+                    <option value="" disabled selected>Selecione o Cliente</option>
                     {% for cliente in clientes %}
                     <option value="{{ cliente.id }}">{{ cliente.nome_cliente }}</option>
                     {% endfor %}
