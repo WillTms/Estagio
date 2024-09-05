@@ -30,7 +30,6 @@ class ItensVenda(models.Model):
         return self.quantidade * self.preco
 
     def save(self, *args, **kwargs):
-        # Atualiza o estoque do produto ao salvar o item de venda
         produto = self.produto
         produto.quantidade -= self.quantidade
         if produto.quantidade < 0:

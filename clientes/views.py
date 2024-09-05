@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.db import models
 from django.db.models import Q
 
-#--------Adicionar produto
+#--------Adiciona Clientes
 
 class AdicionarCliente(CreateView):
     model = Cliente
@@ -17,7 +17,7 @@ class AdicionarCliente(CreateView):
     success_url = reverse_lazy('clientes:listacliente')
 
 
-#--------Lista de produtos
+#--------Lista de clientes cadastrados
 
 class ListaClientes(ListView):
   model = Cliente
@@ -30,7 +30,7 @@ class ListaClientes(ListView):
             return Cliente.objects.filter(Q(nome__icontains=query), estado=True).order_by('id')
         return Cliente.objects.filter(estado=True).order_by('id')
 
-#-------Excluir os produtos
+#-------Excluir clientes
 
 class ExcluirCliente(View):
     def post(self, request, *args, **kwargs):
@@ -46,7 +46,7 @@ class ExcluirCliente(View):
     def get(self, request, *args, **kwargs):
         return JsonResponse({'success': False, 'error': 'Método GET não permitido para exclusão de cliente'})
 
-#--------------Editar os produtos
+#--------------Editar clientes
 
 class EditarCliente(UpdateView):
   model = Cliente

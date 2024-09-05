@@ -5,7 +5,7 @@ from django.db.models.functions import TruncDate
 from .models import Cliente, Produto, Venda, ItensVenda
 from django.views.generic.list import ListView
 
-class VendaListView(View):
+class ListaVendas(View):
     def get(self, request):
         vendas_por_dia = (
             Venda.objects
@@ -27,9 +27,9 @@ class VendaListView(View):
         }
         return render(request, 'vendas/vendas_list.html', context)
 
-class VendaCreateView(View):
+class FazerVenda(View):
     def get(self, request):
-        clientes = Cliente.objects.all()
+        clientes = Cliente.objects.filter(estado=True)
         produtos = Produto.objects.filter(estado=True)
         return render(request, 'vendas/vendas_form.html', {
             'clientes': clientes,
@@ -46,7 +46,7 @@ class VendaCreateView(View):
         for produto in produtos:
             quantidade = int(request.POST.get(f'quantidade_{produto.id}', 0))
             if quantidade > 0:
-                preco = produto.preco_venda  # Sempre usar o preco_venda
+                preco = produto.preco_venda  
                 subtotal = quantidade * preco
                 item = {
                     'produto': produto,
@@ -64,7 +64,7 @@ class VendaCreateView(View):
             'total': total
         })
 
-class VendaConfirmView(View):
+class ConfirmarVenda(View):
     def post(self, request):
         cliente_id = request.POST.get('cliente_id')
         cliente = get_object_or_404(Cliente, id=cliente_id)
@@ -77,7 +77,7 @@ class VendaConfirmView(View):
         for produto in produtos:
             quantidade = int(request.POST.get(f'quantidade_{produto.id}', 0))
             if quantidade > 0:
-                preco = produto.preco_venda  # Sempre usar o preco_venda
+                preco = produto.preco_venda  
                 item_venda = ItensVenda(
                     venda=venda,
                     produto=produto,

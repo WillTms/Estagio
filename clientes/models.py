@@ -8,7 +8,7 @@ class Cliente(models.Model):
     nome_cliente = models.CharField(max_length=30)
     cpf = models.CharField(max_length=11, verbose_name='CPF')
     telefone = models.CharField(max_length=11)
-    email = models.CharField(max_length=40, verbose_name='E-mail', default='teste@gmail.com')
+    email = models.CharField(max_length=40, verbose_name='E-mail', null=True, blank=True)
     estado = models.BooleanField(default=True)
     
     def __str__(self):
