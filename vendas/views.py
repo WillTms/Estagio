@@ -3,7 +3,70 @@ from django.views import View
 from django.db.models import Sum
 from django.db.models.functions import TruncDate
 from .models import Cliente, Produto, Venda, ItensVenda
-from django.views.generic.list import ListView
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
+from django.utils.timezone import now
+from calendar import monthrange
+from datetime import datetime
+
+class GerarRelatorioMensalPDF(View):
+    def get(self, request):
+        # Obtém os parâmetros de mês e ano da requisição GET
+        mes_ano = request.GET.get('mes')  # No formato 'YYYY-MM'
+        if mes_ano:
+            ano, mes = map(int, mes_ano.split('-'))  # Divide 'YYYY-MM' em ano e mês
+            primeiro_dia = datetime(ano, mes, 1)
+            ultimo_dia = datetime(ano, mes, monthrange(ano, mes)[1])
+            
+            # Filtra as vendas dentro do intervalo de datas
+            vendas = Venda.objects.filter(data_venda__date__gte=primeiro_dia, data_venda__date__lte=ultimo_dia)
+
+            total_mes = vendas.aggregate(Sum('total'))['total__sum'] or 0  # Soma o total do mês
+
+            context = {
+                'ano': ano,
+                'mes': mes,
+                'vendas': vendas,
+                'total_mes': total_mes,
+            }
+
+            template_path = 'vendas/relatorio_mensal.html'
+            html = render_to_string(template_path, context)
+
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename="relatorio_vendas_{ano}_{mes}.pdf"'
+
+            pisa_status = pisa.CreatePDF(html, dest=response)
+
+            if pisa_status.err:
+                return HttpResponse(status=400)
+            return response
+        else:
+            # Se o mês/ano não for fornecido, redirecionar ou tratar de forma adequada
+            return HttpResponse(status=400)
+
+class GerarVendaPDF(View):
+    def get(self, request, venda_id):
+        venda = get_object_or_404(Venda, id=venda_id)
+        itens_venda = venda.itens.all()
+
+        context = {
+            'venda': venda,
+            'itens_venda': itens_venda
+        }
+
+        template_path = 'vendas/relatorio_venda.html'
+        html = render_to_string(template_path, context)
+
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="relatorio_venda_{venda.id}.pdf"'
+
+        pisa_status = pisa.CreatePDF(html, dest=response)
+
+        if pisa_status.err:
+            return HttpResponse('Erro ao gerar PDF', status=400)
+        return response
 
 class ListaVendas(View):
     def get(self, request):
@@ -21,9 +84,15 @@ class ListaVendas(View):
             .order_by('-data_venda')
         )
 
+        hoje = now()
+        ano = hoje.year
+        atual_mes = hoje.month
+
         context = {
             'vendas_por_dia': vendas_por_dia,
             'vendas_detalhadas': vendas_detalhadas,
+            'ano': ano,
+            'atual_mes': atual_mes,
         }
         return render(request, 'vendas/vendas_list.html', context)
 
@@ -57,7 +126,6 @@ class FazerVenda(View):
                 itens_venda.append(item)
                 total += subtotal
 
-        # Passa os detalhes da venda para o template de pré-visualização
         return render(request, 'vendas/venda_preview.html', {
             'cliente': cliente,
             'itens_venda': itens_venda,

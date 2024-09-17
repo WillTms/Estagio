@@ -1,25 +1,24 @@
 body {
-    background-color: #ececec; 
-  }
-
-.card-header {
-    padding: 10px 16px;
-}
-
-.table {
-    margin-bottom: 0;
-    table-layout: fixed; 
-}
-.table-responsive {
-    padding: 0px;
-}
-
-.thead-light th {
     background-color: #f8f9fa;
-    color: #495057;
-}
-.table td, .table th {
-    padding: 0.75rem;
-    vertical-align: middle;
 }
 
+.card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.card-header {
+    background-color: #343a40;
+}
+.form-inline label {
+    margin-right: 10px;
+}
+.form-inline input {
+    margin-right: 10px;
+}
+h1 {
+    color: #343a40;
+}
+.table th {
+    background-color: #343a40;
+    color: white;
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt_br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Vendas do Mês</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/relatorio_mensal.css' %}">
+</head>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 40px;
+        background-color: #f7f7f7;
+    }
+    h1, h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+    h1 {
+        font-size: 28px;
+    }
+    h2 {
+        font-size: 20px;
+        color: #555;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    table, th, td {
+        border: 1px solid #555; /* Bordas mais escuras */
+    }
+    th {
+        background-color: #343a40;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-size: 16px;
+    }
+    td {
+        padding: 10px;
+        text-align: left;
+        color: #333;
+        font-size: 16px;
+    }
+    tr:nth-child(even) {
+        background-color: #d9d9d9; /* Linhas pares mais escuras */
+    }
+    tr:nth-child(odd) {
+        background-color: #f2f2f2; /* Linhas ímpares mais escuras */
+    }
+    tr:hover {
+        background-color: #c1c1c1; /* Efeito hover mais escuro */
+    }
+    h3 {
+        text-align: right;
+        margin-top: 20px;
+        color: #333;
+        font-size: 18px;
+    }
+    @media print {
+        body {
+            background-color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        table {
+            box-shadow: none;
+        }
+    }
+</style>
+<body>
+    <h1>Relatório de Vendas</h1>
+    <h2>{{ mes }}/{{ ano }}</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Data da Venda</th>
+                <th>Total da Venda</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for venda in vendas %}
+            <tr>
+                <td>{{ venda.cliente.nome_cliente }}</td>
+                <td>{{ venda.data_venda }}</td>
+                <td>R$ {{ venda.total|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Total do Mês: R$ {{ total_mes|floatformat:2 }}</h3>
+</body>
+</html>
