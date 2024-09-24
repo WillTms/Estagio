@@ -10,19 +10,19 @@ from django.utils.timezone import now
 from calendar import monthrange
 from datetime import datetime
 
+
+ #-----------------Gerar relatorio
 class GerarRelatorioMensalPDF(View):
     def get(self, request):
-        # Obtém os parâmetros de mês e ano da requisição GET
-        mes_ano = request.GET.get('mes')  # No formato 'YYYY-MM'
+        mes_ano = request.GET.get('mes')  
         if mes_ano:
-            ano, mes = map(int, mes_ano.split('-'))  # Divide 'YYYY-MM' em ano e mês
+            ano, mes = map(int, mes_ano.split('-'))  
             primeiro_dia = datetime(ano, mes, 1)
             ultimo_dia = datetime(ano, mes, monthrange(ano, mes)[1])
             
-            # Filtra as vendas dentro do intervalo de datas
             vendas = Venda.objects.filter(data_venda__date__gte=primeiro_dia, data_venda__date__lte=ultimo_dia)
 
-            total_mes = vendas.aggregate(Sum('total'))['total__sum'] or 0  # Soma o total do mês
+            total_mes = vendas.aggregate(Sum('total'))['total__sum'] or 0  
 
             context = {
                 'ano': ano,
@@ -43,8 +43,9 @@ class GerarRelatorioMensalPDF(View):
                 return HttpResponse(status=400)
             return response
         else:
-            # Se o mês/ano não for fornecido, redirecionar ou tratar de forma adequada
             return HttpResponse(status=400)
+
+#-------------------Gerar PDF
 
 class GerarVendaPDF(View):
     def get(self, request, venda_id):
@@ -67,6 +68,8 @@ class GerarVendaPDF(View):
         if pisa_status.err:
             return HttpResponse('Erro ao gerar PDF', status=400)
         return response
+
+#-------------------------- Lista de Vendas
 
 class ListaVendas(View):
     def get(self, request):
@@ -95,6 +98,8 @@ class ListaVendas(View):
             'atual_mes': atual_mes,
         }
         return render(request, 'vendas/vendas_list.html', context)
+
+#------------------- Fazer Vendas
 
 class FazerVenda(View):
     def get(self, request):
@@ -132,6 +137,8 @@ class FazerVenda(View):
             'total': total
         })
 
+
+#-------------------Tela de Confirmar Vendas
 class ConfirmarVenda(View):
     def post(self, request):
         cliente_id = request.POST.get('cliente_id')

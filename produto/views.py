@@ -20,7 +20,6 @@ class AdicionarProduto(CreateView):
 
     def form_valid(self, form):
         try:
-            # Executar validações de valor negativo
             if form.cleaned_data['quantidade'] < 0:
                 form.add_error('quantidade', 'O valor não pode ser negativo.')
                 return self.form_invalid(form)
