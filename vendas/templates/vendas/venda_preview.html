@@ -37,15 +37,22 @@
             </table>
         </div>
         <p><strong>Total:</strong> R$ {{ total|floatformat:2 }}</p>
+        
         <form method="post" action="{% url 'vendas:venda_confirm' %}">
             {% csrf_token %}
             <input type="hidden" name="cliente_id" value="{{ cliente.id }}">
             {% for item in itens_venda %}
             <input type="hidden" name="quantidade_{{ item.produto.id }}" value="{{ item.quantidade }}">
             {% endfor %}
+            
             <div class="d-flex justify-content-end mt-3">
                 <a href="{% url 'vendas:venda_create' %}" class="btn btn-outline-secondary me-2">Cancelar</a>
-                <button type="submit" class="btn btn-success">Confirmar Venda</button>
+                
+                <!-- Botão para Deixar Venda Pendente -->
+                <button type="submit" name="status" value="pendente" class="btn btn-warning me-2">Deixar Pendente</button>
+                
+                <!-- Botão para Confirmar Venda -->
+                <button type="submit" name="status" value="paga" class="btn btn-success">Confirmar Venda</button>
             </div>
         </form>
     </div>

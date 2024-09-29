@@ -11,6 +11,23 @@ from calendar import monthrange
 from datetime import datetime
 
 
+
+#-------------Pagar Pendencias
+class MarcarVendaComoPaga(View):
+    def post(self, request, venda_id):
+        venda = get_object_or_404(Venda, id=venda_id)
+        venda.status = 'paga'
+        venda.save()
+        return redirect('vendas:lista_pendentes')
+
+#-------------Vendas Pendentes
+class ListaVendasPendentes(View):
+    def get(self, request):
+        vendas_pendentes = Venda.objects.filter(status='pendente').order_by('data_venda')
+        return render(request, 'vendas/vendas_pendentes.html', {
+            'vendas_pendentes': vendas_pendentes,
+        })
+
  #-----------------Gerar relatorio
 class GerarRelatorioMensalPDF(View):
     def get(self, request):
@@ -20,7 +37,7 @@ class GerarRelatorioMensalPDF(View):
             primeiro_dia = datetime(ano, mes, 1)
             ultimo_dia = datetime(ano, mes, monthrange(ano, mes)[1])
             
-            vendas = Venda.objects.filter(data_venda__date__gte=primeiro_dia, data_venda__date__lte=ultimo_dia)
+            vendas = Venda.objects.filter(data_venda__date__gte=primeiro_dia, data_venda__date__lte=ultimo_dia, status='paga')
 
             total_mes = vendas.aggregate(Sum('total'))['total__sum'] or 0  
 
@@ -49,7 +66,7 @@ class GerarRelatorioMensalPDF(View):
 
 class GerarVendaPDF(View):
     def get(self, request, venda_id):
-        venda = get_object_or_404(Venda, id=venda_id)
+        venda = get_object_or_404(Venda.objects.filter(status='paga'), id=venda_id)
         itens_venda = venda.itens.all()
 
         context = {
@@ -83,6 +100,7 @@ class ListaVendas(View):
 
         vendas_detalhadas = (
             Venda.objects
+            .filter(status='paga')
             .annotate(data=TruncDate('data_venda'))
             .order_by('-data_venda')
         )
@@ -143,6 +161,8 @@ class ConfirmarVenda(View):
     def post(self, request):
         cliente_id = request.POST.get('cliente_id')
         cliente = get_object_or_404(Cliente, id=cliente_id)
+        status_venda = request.POST.get('status')  # Captura o status enviado (pendente ou paga)
+
         venda = Venda(cliente=cliente)
         venda.save()
         
@@ -152,7 +172,7 @@ class ConfirmarVenda(View):
         for produto in produtos:
             quantidade = int(request.POST.get(f'quantidade_{produto.id}', 0))
             if quantidade > 0:
-                preco = produto.preco_venda  
+                preco = produto.preco_venda
                 item_venda = ItensVenda(
                     venda=venda,
                     produto=produto,
@@ -161,8 +181,13 @@ class ConfirmarVenda(View):
                 )
                 item_venda.save()
                 total += item_venda.get_subtotal()
-        
+
         venda.total = total
+        venda.status = status_venda  # Define o status como "paga" ou "pendente"
         venda.save()
 
-        return redirect('vendas:venda_create')
+        # Redirecionamento baseado no status da venda
+        if status_venda == 'paga':
+            return redirect('vendas:lista_vendas')  # Redireciona para a lista de vendas
+        else:
+            return redirect('vendas:lista_pendentes')  # Redireciona para a lista de vendas pendentes

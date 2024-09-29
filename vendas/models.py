@@ -3,12 +3,18 @@ from clientes.models import Cliente
 from produto.models import Produto
 
 class Venda(models.Model):
+    STATUS_CHOICES = (
+        ('pendente', 'Pendente'),
+        ('paga', 'Paga'),
+    )
+
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='vendas')
     data_venda = models.DateTimeField(auto_now_add=True)
     total = models.FloatField(default=0.0)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='paga')  # Adicionado campo de status
 
     def __str__(self):
-        return f'Venda {self.id} - Cliente: {self.cliente.nome_cliente} - Total: {self.total}'
+        return f'Venda {self.id} - Cliente: {self.cliente.nome_cliente} - Total: {self.total} - Status: {self.status}'
 
     def calcular_total(self):
         total = sum(item.get_subtotal() for item in self.itens.all())
