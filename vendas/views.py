@@ -92,6 +92,7 @@ class ListaVendas(View):
     def get(self, request):
         vendas_por_dia = (
             Venda.objects
+            .filter(status='paga')
             .annotate(data=TruncDate('data_venda'))
             .values('data')
             .annotate(total_dia=Sum('total'))

@@ -38,7 +38,7 @@
                 <form method="POST" action="{% url 'vendas:marcar_paga' venda.id %}" style="display:inline-block;">
                   {% csrf_token %}
                   <button type="submit" class="btn btn-success btn-sm">
-                    <img alt="Marcar como paga" style="width: 20px; height: 20px;">
+                    <img src="{% static 'icons/pagamento.png' %}" alt="Marcar como paga" style="width: 20px; height: 20px;">
                   </button>
                 </form>
               </td>

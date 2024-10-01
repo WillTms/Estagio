@@ -11,7 +11,7 @@ class Venda(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='vendas')
     data_venda = models.DateTimeField(auto_now_add=True)
     total = models.FloatField(default=0.0)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='paga')  # Adicionado campo de status
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='paga')  
 
     def __str__(self):
         return f'Venda {self.id} - Cliente: {self.cliente.nome_cliente} - Total: {self.total} - Status: {self.status}'
