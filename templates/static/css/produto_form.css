@@ -22,3 +22,12 @@
 .form-control {
     height: 38px; /* Aumentando a altura dos campos de formulário */
 }
+
+.navbar-nav .nav-link {
+    color: white; 
+}
+
+.navbar-nav .nav-link:hover {
+      background-color: #ececec;
+      color: black !important; 
+}

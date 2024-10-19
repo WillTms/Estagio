@@ -13,3 +13,12 @@ body {
 .form-label {
     font-weight: bold; /* Deixa o texto dos labels em negrito */
 }
+
+.navbar-nav .nav-link {
+    color: white; 
+}
+
+.navbar-nav .nav-link:hover {
+      background-color: #ececec;
+      color: black !important; 
+}

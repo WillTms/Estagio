@@ -1,3 +1,12 @@
 body {
     background-color: #ececec; 
   }
+
+  .navbar-nav .nav-link {
+    color: white; 
+}
+
+.navbar-nav .nav-link:hover {
+      background-color: #ececec;
+      color: black !important; 
+}

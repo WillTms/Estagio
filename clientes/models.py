@@ -5,9 +5,9 @@ from django.forms import ValidationError
 from utils.validacpf import valida_cpf
 
 class Cliente(models.Model):
-    nome_cliente = models.CharField(max_length=30)
-    cpf = models.CharField(max_length=11, verbose_name='CPF')
-    telefone = models.CharField(max_length=11)
+    nome_cliente = models.CharField(max_length=30, verbose_name='Nome do Cliente')
+    cpf = models.CharField(max_length=11, verbose_name='CPF', null=True, blank=True)
+    telefone = models.CharField(max_length=11, null=True, blank=True)
     email = models.CharField(max_length=40, verbose_name='E-mail', null=True, blank=True)
     estado = models.BooleanField(default=True)
     

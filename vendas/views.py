@@ -63,7 +63,6 @@ class GerarRelatorioMensalPDF(View):
             return HttpResponse(status=400)
 
 #-------------------Gerar PDF
-
 class GerarVendaPDF(View):
     def get(self, request, venda_id):
         venda = get_object_or_404(Venda.objects.filter(status='paga'), id=venda_id)
@@ -87,7 +86,6 @@ class GerarVendaPDF(View):
         return response
 
 #-------------------------- Lista de Vendas
-
 class ListaVendas(View):
     def get(self, request):
         vendas_por_dia = (
@@ -119,7 +117,6 @@ class ListaVendas(View):
         return render(request, 'vendas/vendas_list.html', context)
 
 #------------------- Fazer Vendas
-
 class FazerVenda(View):
     def get(self, request):
         clientes = Cliente.objects.filter(estado=True)
@@ -162,7 +159,7 @@ class ConfirmarVenda(View):
     def post(self, request):
         cliente_id = request.POST.get('cliente_id')
         cliente = get_object_or_404(Cliente, id=cliente_id)
-        status_venda = request.POST.get('status')  # Captura o status enviado (pendente ou paga)
+        status_venda = request.POST.get('status')  
 
         venda = Venda(cliente=cliente)
         venda.save()
@@ -184,11 +181,10 @@ class ConfirmarVenda(View):
                 total += item_venda.get_subtotal()
 
         venda.total = total
-        venda.status = status_venda  # Define o status como "paga" ou "pendente"
+        venda.status = status_venda 
         venda.save()
 
-        # Redirecionamento baseado no status da venda
         if status_venda == 'paga':
-            return redirect('vendas:lista_vendas')  # Redireciona para a lista de vendas
+            return redirect('vendas:venda_list')  
         else:
-            return redirect('vendas:lista_pendentes')  # Redireciona para a lista de vendas pendentes
+            return redirect('vendas:lista_pendentes') 

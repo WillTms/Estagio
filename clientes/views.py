@@ -10,7 +10,6 @@ from django.db import models
 from django.db.models import Q
 
 #--------Adiciona Clientes
-
 class AdicionarCliente(CreateView):
     model = Cliente
     fields = ['nome_cliente', 'cpf', 'telefone', 'email']
@@ -18,7 +17,6 @@ class AdicionarCliente(CreateView):
 
 
 #--------Lista de clientes cadastrados
-
 class ListaClientes(ListView):
   model = Cliente
   template_name = 'clientes/cliente_list.html'
@@ -31,7 +29,6 @@ class ListaClientes(ListView):
         return Cliente.objects.filter(estado=True).order_by('id')
 
 #-------Excluir clientes
-
 class ExcluirCliente(View):
     def post(self, request, *args, **kwargs):
         cliente_id = kwargs.get('pk')
@@ -47,7 +44,6 @@ class ExcluirCliente(View):
         return JsonResponse({'success': False, 'error': 'Método GET não permitido para exclusão de cliente'})
 
 #--------------Editar clientes
-
 class EditarCliente(UpdateView):
   model = Cliente
   fields = ['nome_cliente', 'cpf', 'telefone', 'email']

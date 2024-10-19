@@ -22,3 +22,12 @@ h1 {
     background-color: #343a40;
     color: white;
 }
+
+.navbar-nav .nav-link {
+    color: white; 
+}
+
+.navbar-nav .nav-link:hover {
+      background-color: #ececec;
+      color: black !important; 
+}

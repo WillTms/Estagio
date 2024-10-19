@@ -12,7 +12,6 @@ from django.db import IntegrityError
 
 
 #--------Adicionar produto
-
 class AdicionarProduto(CreateView):
     model = Produto
     fields = ['nome', 'quantidade', 'preco_compra', 'preco_venda', 'preco_promocional', 'descricao','slug']
@@ -48,7 +47,6 @@ class AdicionarProduto(CreateView):
             return self.form_invalid(form)
 
 #--------Lista de produtos
-
 class Lista(ListView):
   model = Produto
   template_name = 'produto_list.html'
@@ -61,7 +59,6 @@ class Lista(ListView):
         return Produto.objects.filter(estado=True).order_by('id')
 
 #-------Excluir os produtos
-
 class ExcluirProduto(View):
     success_url = reverse_lazy('produto:listaproduto')
 
@@ -77,7 +74,6 @@ class ExcluirProduto(View):
 
 
 #--------------Editar os produtos
-
 class EditarProduto(UpdateView):
   model = Produto
   fields = ['nome', 'quantidade', 'preco_compra', 'preco_venda', 'preco_promocional', 'descricao','slug']
