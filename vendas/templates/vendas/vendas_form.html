@@ -17,9 +17,9 @@
       <form method="post">
         {% csrf_token %}
         <div class="mb-3">
-          <label for="cliente" class="form-label">Cliente referente a venda</label>
-          <select class="form-select" id="cliente" name="cliente" required>
-            <option value="" disabled selected>Selecione o Cliente</option>
+          <label for="cliente" class="form-label">Cliente referente à venda (opcional)</label>
+          <select class="form-select" id="cliente" name="cliente">
+            <option value="">Venda sem cliente</option> <!-- Cliente opcional -->
             {% for cliente in clientes %}
               <option value="{{ cliente.id }}">{{ cliente.nome_cliente }}</option>
             {% endfor %}

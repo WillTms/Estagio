@@ -128,7 +128,10 @@ class FazerVenda(View):
 
     def post(self, request):
         cliente_id = request.POST.get('cliente')
-        cliente = get_object_or_404(Cliente, id=cliente_id)
+        cliente = None
+        if cliente_id:
+            cliente = get_object_or_404(Cliente, id=cliente_id)  # Cliente opcional
+        
         produtos = Produto.objects.filter(estado=True)
         itens_venda = []
 
@@ -158,10 +161,13 @@ class FazerVenda(View):
 class ConfirmarVenda(View):
     def post(self, request):
         cliente_id = request.POST.get('cliente_id')
-        cliente = get_object_or_404(Cliente, id=cliente_id)
-        status_venda = request.POST.get('status')  
+        cliente = None
+        if cliente_id:
+            cliente = get_object_or_404(Cliente, id=cliente_id)  # Cliente opcional
 
-        venda = Venda(cliente=cliente)
+        status_venda = request.POST.get('status')  # Status da venda (paga ou pendente)
+
+        venda = Venda(cliente=cliente)  # Cliente pode ser None
         venda.save()
         
         produtos = Produto.objects.filter(estado=True)
@@ -181,10 +187,10 @@ class ConfirmarVenda(View):
                 total += item_venda.get_subtotal()
 
         venda.total = total
-        venda.status = status_venda 
+        venda.status = status_venda  # Define o status como "paga" ou "pendente"
         venda.save()
 
         if status_venda == 'paga':
-            return redirect('vendas:venda_list')  
+            return redirect('vendas:venda_list')  # Redireciona para a lista de vendas pagas
         else:
-            return redirect('vendas:lista_pendentes') 
+            return redirect('vendas:lista_pendentes')  # Redireciona para a lista de vendas pendentes
