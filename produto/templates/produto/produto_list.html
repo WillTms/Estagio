@@ -33,7 +33,6 @@
               <th scope="col">Quantidade</th>
               <th scope="col">Preço de Compra</th>
               <th scope="col">Preço de Venda</th>
-              <th scope="col">Preço de Promoção</th>
               <th scope="col">Descrição</th>
               <th scope="col">Controle</th>
             </tr>
@@ -45,7 +44,6 @@
               <td>{{ produto.quantidade }}</td>
               <td>R$: {{ produto.preco_compra }}</td>
               <td>R$: {{ produto.preco_venda }}</td>
-              <td>R$: {{ produto.preco_promocional }}</td>
               <td>{{ produto.descricao }}</td>
               <td>
                 <a href="{% url 'produto:editarproduto' pk=produto.pk %}" class="btn btn-success btn-sm">

@@ -163,11 +163,18 @@ class ConfirmarVenda(View):
         cliente_id = request.POST.get('cliente_id')
         cliente = None
         if cliente_id:
-            cliente = get_object_or_404(Cliente, id=cliente_id)  # Cliente opcional
+            cliente = get_object_or_404(Cliente, id=cliente_id)
 
         status_venda = request.POST.get('status')  # Status da venda (paga ou pendente)
 
-        venda = Venda(cliente=cliente)  # Cliente pode ser None
+        # Captura o valor final inserido pelo vendedor, ou usa o valor total calculado se o campo não foi preenchido
+        valor_final = request.POST.get('valor_final')
+        if valor_final:
+            valor_final = float(valor_final)
+        else:
+            valor_final = None  # Define como None se o campo não foi preenchido
+
+        venda = Venda(cliente=cliente)
         venda.save()
         
         produtos = Produto.objects.filter(estado=True)
@@ -186,11 +193,14 @@ class ConfirmarVenda(View):
                 item_venda.save()
                 total += item_venda.get_subtotal()
 
-        venda.total = total
-        venda.status = status_venda  # Define o status como "paga" ou "pendente"
+        # Se valor_final for None, usa o total calculado
+        venda.total = valor_final if valor_final else total
+        venda.status = status_venda
         venda.save()
 
         if status_venda == 'paga':
             return redirect('vendas:venda_list')  # Redireciona para a lista de vendas pagas
         else:
             return redirect('vendas:lista_pendentes')  # Redireciona para a lista de vendas pendentes
+
+

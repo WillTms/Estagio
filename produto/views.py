@@ -31,10 +31,6 @@ class AdicionarProduto(CreateView):
                 form.add_error('preco_venda', 'O valor não pode ser negativo.')
                 return self.form_invalid(form)
         
-            if form.cleaned_data.get('preco_promocional') is not None and form.cleaned_data['preco_promocional'] < 0:
-                form.add_error('preco_promocional', 'O valor não pode ser negativo.')
-                return self.form_invalid(form)
-
             if Produto.objects.filter(slug=form.cleaned_data['slug']).exists():
                 mensagem_erro = "Já existe um produto com este slug. Por favor, escolha outro."
                 form.add_error('slug', mensagem_erro)

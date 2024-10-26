@@ -37,7 +37,6 @@
               <tr>
                 <th>Produto</th>
                 <th>Preço de Venda</th>
-                <th>Preço Promocional</th>
                 <th>Quantidade em Estoque</th>
                 <th>Quantidade</th>
               </tr>
@@ -47,13 +46,6 @@
                 <tr>
                   <td>{{ produto.nome }}</td>
                   <td>R$ {{ produto.preco_venda|floatformat:2 }}</td>
-                  <td>
-                    {% if produto.preco_promocional %}
-                      R$ {{ produto.preco_promocional|floatformat:2 }}
-                    {% else %}
-                      -
-                    {% endif %}
-                  </td>
                   <td>{{ produto.quantidade }}</td>
                   <td>
                     <input type="number" name="quantidade_{{ produto.id }}" min="0" max="{{ produto.quantidade }}" value="0" class="form-control" required />

@@ -8,9 +8,9 @@ class Produto(models.Model):
     quantidade = models.PositiveIntegerField(default=0)
     preco_compra = models.FloatField(verbose_name='Preço Compra:')
     preco_venda = models.FloatField(verbose_name='Preço Venda:')
-    preco_promocional = models.FloatField(blank=True, null=True, verbose_name='Preço Promoção:')
+    preco_promocional = models.FloatField(blank=True, null=True, verbose_name='Preço Promoção:') #retirar
     descricao = models.TextField(max_length=255, blank=True, null=True, verbose_name='Descrição:')
-    slug = models.SlugField(unique=True, blank=True, null=True, verbose_name='Slug:')
+    slug = models.SlugField(unique=True, blank=True, null=True, verbose_name='Slug:')#retirar
     estado = models.BooleanField(default=True)
     
 

@@ -1,33 +1,33 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-dark w-100" style="width: 100%;">
-  <div class="container-fluid">
-      <a class="navbar-brand text-white" href="#">Sistema J&J</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                  <a class="nav-link text-white active" aria-current="page" href="{% url 'produto:listaproduto' %}">Estoque</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link text-white" href="{% url 'clientes:listacliente' %}">Clientes</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link text-white" href="{% url 'vendas:venda_create' %}">Fazer Venda</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link text-white" href="{% url 'vendas:lista_pendentes' %}">Vendas Pendentes</a>
-              </li>
-              <li class="nav-item d-flex align-items-center">
-                  <a class="nav-link text-white" href="{% url 'vendas:venda_list' %}">Histórico de Vendas</a>
-              </li>
-          </ul>
-          <!--
-          <form class="d-flex ms-auto" method="GET" action="#">
-              <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar" name="busca">
-              <button class="btn btn-outline-light" type="submit">Pesquisar</button>
-          </form>
-        -->
-      </div>
-  </div>
-</nav>
+    <div class="container-fluid">
+        <!-- Logo personalizada -->
+        <span class="navbar-brand text-white fw-bold fs-4" style="font-family: 'Arial', sans-serif; letter-spacing: 1px;">
+            Sistema J&J
+        </span>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-white active" aria-current="page" href="{% url 'produto:listaproduto' %}">Estoque</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'clientes:listacliente' %}">Clientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'vendas:venda_create' %}">Fazer Venda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'vendas:lista_pendentes' %}">Vendas Pendentes</a>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                    <a class="nav-link text-white" href="{% url 'vendas:venda_list' %}">Histórico de Vendas</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </nav>
+
+  

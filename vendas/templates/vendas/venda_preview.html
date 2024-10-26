@@ -36,21 +36,27 @@
                 </tbody>
             </table>
         </div>
-        <p><strong>Total:</strong> R$ {{ total|floatformat:2 }}</p>
-        
+
+        <p><strong>Total Original:</strong> R$ {{ total|floatformat:2 }}</p>
+
+        <!-- Formulário de confirmação da venda -->
         <form method="post" action="{% url 'vendas:venda_confirm' %}">
             {% csrf_token %}
             <input type="hidden" name="cliente_id" value="{{ cliente.id }}">
             {% for item in itens_venda %}
             <input type="hidden" name="quantidade_{{ item.produto.id }}" value="{{ item.quantidade }}">
             {% endfor %}
-            
+
+            <!-- Campo para alterar o valor final (opcional, sem required) -->
+            <div class="mb-3">
+                <label for="valor_final" class="form-label">Valor Final com Desconto (opcional):</label>
+                <input type="number" step="0.01" class="form-control" id="valor_final" name="valor_final" value="{{ total|floatformat:2 }}">
+            </div>
+
             <div class="d-flex justify-content-end mt-3">
-                <a href="{% url 'vendas:venda_create' %}" class="btn btn-outline-danger me-2 border-2 fs-6 fw-semibold">Cancelar</a>
-                
-                <button type="submit" name="status" value="pendente" class="btn btn-outline-success me-2 border-2 fs-6 fw-semibold">Deixar Pendente</button>
-                
-                <button type="submit" name="status" value="paga" class="btn btn-success fs-6 fw-semibold">Confirmar Venda</button>
+                <a href="{% url 'vendas:venda_create' %}" class="btn btn-outline-secondary me-2">Cancelar</a>
+                <button type="submit" name="status" value="pendente" class="btn btn-warning me-2">Deixar Pendente</button>
+                <button type="submit" name="status" value="paga" class="btn btn-success">Confirmar Venda</button>
             </div>
         </form>
     </div>
