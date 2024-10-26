@@ -12,7 +12,12 @@
     {% include "navbar.html" %}
     <div class="container mt-4">
         <h1>Pré-visualização da Venda</h1>
-        <p><strong>Cliente:</strong> {{ cliente.nome_cliente }}</p>
+        {% if cliente %}
+            <p><strong>Cliente:</strong> {{ cliente.nome_cliente }}</p>
+        {% else %}
+            <p><strong>Cliente:</strong> Não Registrado</p>
+        {% endif %}
+        
         <h2>Produtos</h2>
         <div class="table-responsive">
             <table class="table table-striped">
@@ -39,15 +44,19 @@
 
         <p><strong>Total Original:</strong> R$ {{ total|floatformat:2 }}</p>
 
-        <!-- Formulário de confirmação da venda -->
         <form method="post" action="{% url 'vendas:venda_confirm' %}">
             {% csrf_token %}
-            <input type="hidden" name="cliente_id" value="{{ cliente.id }}">
+            {% if cliente %}
+                <input type="hidden" name="cliente_id" value="{{ cliente.id }}">
+            {% else %}
+                <input type="hidden" name="cliente_id" value="">
+            {% endif %}
+            
             {% for item in itens_venda %}
-            <input type="hidden" name="quantidade_{{ item.produto.id }}" value="{{ item.quantidade }}">
+                <input type="hidden" name="quantidade_{{ item.produto.id }}" value="{{ item.quantidade }}">
             {% endfor %}
+        
 
-            <!-- Campo para alterar o valor final (opcional, sem required) -->
             <div class="mb-3">
                 <label for="valor_final" class="form-label">Valor Final com Desconto (opcional):</label>
                 <input type="number" step="0.01" class="form-control" id="valor_final" name="valor_final" value="{{ total|floatformat:2 }}">
@@ -55,7 +64,15 @@
 
             <div class="d-flex justify-content-end mt-3">
                 <a href="{% url 'vendas:venda_create' %}" class="btn btn-outline-secondary me-2">Cancelar</a>
-                <button type="submit" name="status" value="pendente" class="btn btn-warning me-2">Deixar Pendente</button>
+                
+                {% if cliente %}
+                    <button type="submit" name="status" value="pendente" class="btn btn-warning me-2">Deixar Pendente</button>
+                {% else %}
+                    <button type="button" class="btn btn-warning me-2" disabled title="Apenas clientes registrados podem deixar a venda pendente.">
+                        Deixar Pendente
+                    </button>
+                {% endif %}
+                
                 <button type="submit" name="status" value="paga" class="btn btn-success">Confirmar Venda</button>
             </div>
         </form>

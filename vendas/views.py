@@ -9,6 +9,8 @@ from xhtml2pdf import pisa
 from django.utils.timezone import now
 from calendar import monthrange
 from datetime import datetime
+from django.contrib import messages  
+
 
 
 
@@ -167,7 +169,11 @@ class ConfirmarVenda(View):
 
         status_venda = request.POST.get('status')  # Status da venda (paga ou pendente)
 
-        # Captura o valor final inserido pelo vendedor, ou usa o valor total calculado se o campo não foi preenchido
+        # Se o cliente não estiver registrado e o status for pendente, exibir mensagem de erro
+        if not cliente and status_venda == 'pendente':
+            messages.error(request, "Apenas clientes registrados podem deixar a venda pendente.")
+            return redirect('vendas:venda_preview')  # Redireciona para pré-visualização (ajuste a URL conforme necessário)
+
         valor_final = request.POST.get('valor_final')
         if valor_final:
             valor_final = float(valor_final)
@@ -202,5 +208,4 @@ class ConfirmarVenda(View):
             return redirect('vendas:venda_list')  # Redireciona para a lista de vendas pagas
         else:
             return redirect('vendas:lista_pendentes')  # Redireciona para a lista de vendas pendentes
-
 
