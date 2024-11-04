@@ -25,7 +25,7 @@ class ListaClientes(ListView):
   def get_queryset(self):
         query = self.request.GET.get('busca')
         if query:
-            return Cliente.objects.filter(Q(nome__icontains=query), estado=True).order_by('id')
+            return Cliente.objects.filter(Q(nome_cliente__icontains=query), estado=True).order_by('id')
         return Cliente.objects.filter(estado=True).order_by('id')
 
 #-------Excluir clientes

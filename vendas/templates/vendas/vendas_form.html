@@ -1,64 +1,75 @@
 <!DOCTYPE html>
 <html lang="pt_br">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fazer Venda</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/vendas_form.css' %}">
-  </head>
-  <body>
-
+</head>
+<body>
     {% include 'navbar.html' %}
     
     <div class="container mt-4">
-      <h1>Efetuar Venda</h1>
-      <form method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-          <label for="cliente" class="form-label">Cliente referente à venda (opcional)</label>
-          <select class="form-select" id="cliente" name="cliente">
-            <option value="">Venda sem cliente</option> <!-- Cliente opcional -->
-            {% for cliente in clientes %}
-              <option value="{{ cliente.id }}">{{ cliente.nome_cliente }}</option>
-            {% endfor %}
-          </select>
+        <!-- Linha para título e botão de pesquisa -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Efetuar Venda</h1>
+            
+            <!-- Formulário de pesquisa com GET separado -->
+            <form method="get" action="{% url 'vendas:venda_create' %}" class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Pesquisar Produto" aria-label="Pesquisar" name="busca" value="{{ termo_pesquisa|default_if_none:""  }}" style="width: 250px;">
+                <button class="btn btn-dark" type="submit">Pesquisar</button>
+            </form>
         </div>
-    
-        <div class="d-flex justify-content-between align-items-center mt-4">
-            <h2>Produtos</h2>
-            <button type="submit" class="btn btn-success">Pré-visualizar Venda</button>
-        </div>
-    
-        <div class="table-responsive">
-          <table class="table table-striped">
-            <thead class="table-dark">
-              <tr>
-                <th>Produto</th>
-                <th>Preço de Venda</th>
-                <th>Quantidade em Estoque</th>
-                <th>Quantidade</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for produto in produtos %}
-                <tr>
-                  <td>{{ produto.nome }}</td>
-                  <td>R$ {{ produto.preco_venda|floatformat:2 }}</td>
-                  <td>{{ produto.quantidade }}</td>
-                  <td>
-                    <input type="number" name="quantidade_{{ produto.id }}" min="0" max="{{ produto.quantidade }}" value="0" class="form-control" required />
-                    <input type="hidden" name="produtos" value="{{ produto.id }}" />
-                  </td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </form>
+
+        <!-- Formulário principal de venda com POST -->
+        <form method="post" action="{% url 'vendas:venda_create' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="cliente" class="form-label">Cliente referente à venda</label>
+                <select class="form-select" id="cliente" name="cliente">
+                    <option value="" disabled selected>Selecione o Cliente (opcional)</option>
+                    {% for cliente in clientes %}
+                        <option value="{{ cliente.id }}">{{ cliente.nome_cliente }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Linha para título "Produtos" e botão "Pré-visualizar Venda" -->
+            <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+                <h2 class="mb-0">Produtos</h2>
+                <button type="submit" class="btn btn-success">Pré-visualizar Venda</button>
+            </div>
+
+            <div class="table-responsive mt-3">
+                <table class="table table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Produto</th>
+                            <th>Preço de Venda</th>
+                            <th>Quantidade em Estoque</th>
+                            <th>Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for produto in produtos %}
+                            <tr>
+                                <td>{{ produto.nome }}</td>
+                                <td>R$ {{ produto.preco_venda|floatformat:2 }}</td>
+                                <td>{{ produto.quantidade }}</td>
+                                <td>
+                                    <input type="number" name="quantidade_{{ produto.id }}" min="0" max="{{ produto.quantidade }}" value="0" class="form-control" required />
+                                    <input type="hidden" name="produtos" value="{{ produto.id }}" />
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  </body>
+</body>
 </html>

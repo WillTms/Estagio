@@ -4,21 +4,13 @@ from django.utils.text import slugify
 
 
 class Produto(models.Model):
-    nome = models.CharField(max_length=255)
-    quantidade = models.PositiveIntegerField(default=0)
+    nome = models.CharField(max_length=255,verbose_name='Nome Produto:')
+    quantidade = models.PositiveIntegerField(default=0,verbose_name='Quantidade:')
     preco_compra = models.FloatField(verbose_name='Preço Compra:')
     preco_venda = models.FloatField(verbose_name='Preço Venda:')
-    preco_promocional = models.FloatField(blank=True, null=True, verbose_name='Preço Promoção:') #retirar
     descricao = models.TextField(max_length=255, blank=True, null=True, verbose_name='Descrição:')
-    slug = models.SlugField(unique=True, blank=True, null=True, verbose_name='Slug:')#retirar
     estado = models.BooleanField(default=True)
     
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.nome)
-        super().save(*args, **kwargs)
-
     def __str__(self):
         return self.nome
 

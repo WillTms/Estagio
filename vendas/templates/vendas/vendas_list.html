@@ -42,7 +42,13 @@
                             {% for venda in vendas_detalhadas %}
                                 {% if venda.data == dia.data %}
                                     <tr>
-                                        <td>{{ venda.cliente.nome_cliente }}</td>
+                                        <td>
+                                            {% if venda.cliente %}
+                                                {{ venda.cliente.nome_cliente }}
+                                            {% else %}
+                                                Sem registro
+                                            {% endif %}
+                                        </td>
                                         <td>{{ venda.data_venda }}</td>
                                         <td>R$ {{ venda.total|floatformat:2 }}</td>
                                         <td>

@@ -14,7 +14,7 @@ from django.db import IntegrityError
 #--------Adicionar produto
 class AdicionarProduto(CreateView):
     model = Produto
-    fields = ['nome', 'quantidade', 'preco_compra', 'preco_venda', 'preco_promocional', 'descricao','slug']
+    fields = ['nome', 'quantidade', 'preco_compra', 'preco_venda', 'descricao']  
     success_url = reverse_lazy('produto:listaproduto')
 
     def form_valid(self, form):
@@ -29,11 +29,6 @@ class AdicionarProduto(CreateView):
         
             if form.cleaned_data['preco_venda'] < 0:
                 form.add_error('preco_venda', 'O valor não pode ser negativo.')
-                return self.form_invalid(form)
-        
-            if Produto.objects.filter(slug=form.cleaned_data['slug']).exists():
-                mensagem_erro = "Já existe um produto com este slug. Por favor, escolha outro."
-                form.add_error('slug', mensagem_erro)
                 return self.form_invalid(form)
             
             return super().form_valid(form)
@@ -72,7 +67,7 @@ class ExcluirProduto(View):
 #--------------Editar os produtos
 class EditarProduto(UpdateView):
   model = Produto
-  fields = ['nome', 'quantidade', 'preco_compra', 'preco_venda', 'preco_promocional', 'descricao','slug']
+  fields = ['nome', 'quantidade', 'preco_compra', 'preco_venda', 'descricao']
   success_url = reverse_lazy('produto:listaproduto') 
   
   def form_valid(self, form):

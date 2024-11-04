@@ -1,33 +1,35 @@
 .custom-form {
-    max-width: 1000px; /* Aumentando a largura máxima */
-    margin: auto;
-    padding: 10px; /* Aumentando o espaçamento interno */
-    background-color: #f9f9f9;
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #f5f5f5; /* Cor de fundo cinza claro */
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 .custom-form h1 {
     text-align: center;
     margin-bottom: 20px;
 }
+
 .custom-form .form-row {
-    margin-bottom: -10px; /* Aumentando o espaçamento entre as linhas */
+    margin-bottom: -10px;
 }
+
 .custom-form .form-group {
-    padding: 0 10px; /* Aumentando o espaçamento interno */
+    padding: 0 10px;
 }
-.custom-form button[type="submit"] {
-    width: 100%;
-}
+
 .form-control {
-    height: 38px; /* Aumentando a altura dos campos de formulário */
+    height: 38px;
 }
 
-.navbar-nav .nav-link {
-    color: white; 
+.custom-form button[type="submit"],
+.custom-form .btn-outline-success {
+    width: 100px;
 }
 
-.navbar-nav .nav-link:hover {
-      background-color: #ececec;
-      color: black !important; 
+.bg-white {
+    --bs-bg-opacity: 1;
+    background-color: #f9f9f9 !important;
 }

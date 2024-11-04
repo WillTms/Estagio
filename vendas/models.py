@@ -8,16 +8,15 @@ class Venda(models.Model):
         ('paga', 'Paga'),
     )
 
-    # Cliente agora é opcional
     cliente = models.ForeignKey(Cliente, on_delete=models.SET_NULL, related_name='vendas', null=True, blank=True)
     data_venda = models.DateTimeField(auto_now_add=True)
     total = models.FloatField(default=0.0)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='paga')
 
     def __str__(self):
-        if self.cliente:
-            return f'Venda {self.id} - Cliente: {self.cliente.nome_cliente} - Total: {self.total} - Status: {self.status}'
-        return f'Venda {self.id} - Cliente: Não Registrado - Total: {self.total} - Status: {self.status}'
+        # Atualização para exibir "Sem registro" quando o cliente não existir
+        cliente_nome = self.cliente.nome_cliente if self.cliente else "Sem registro"
+        return f'Venda {self.id} - Cliente: {cliente_nome} - Total: {self.total} - Status: {self.status}'
 
     def calcular_total(self):
         total = sum(item.get_subtotal() for item in self.itens.all())
@@ -28,6 +27,7 @@ class Venda(models.Model):
     class Meta:
         verbose_name = 'Venda'
         verbose_name_plural = 'Vendas'
+
 
 
 class ItensVenda(models.Model):

@@ -1,54 +1,84 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt_br">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vendas Pendentes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/vendas_pendentes.css' %}">
-    <link rel="stylesheet" href="{% static 'icons/css/all.min.css' %}">
-  </head>
-  <body>
+</head>
+<body>
 
     {% include "navbar.html" %}
 
     <main class="container mt-4">
-      <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3">Vendas Pendentes</h1>
-      </div>
-
-      <div class="table-responsive">
-        <table class="table table-hover table-bordered border-secondary">
-          <thead class="table-dark">
-            <tr>
-              <th scope="col">Cliente</th>
-              <th scope="col">Data da Venda</th>
-              <th scope="col">Total</th>
-              <th scope="col">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for venda in vendas_pendentes %}
-            <tr id="venda-{{ venda.pk }}">
-              <td>{{ venda.cliente.nome_cliente }}</td>
-              <td>{{ venda.data_venda }}</td>
-              <td>R$: {{ venda.total|floatformat:2 }}</td>
-              <td>
-                <form method="POST" action="{% url 'vendas:marcar_paga' venda.id %}" style="display:inline-block;">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-success btn-sm">
-                    <img src="{% static 'icons/pagamento.png' %}" alt="Marcar como paga" style="width: 20px; height: 20px;">
-                  </button>
-                </form>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+        
+        <div class="table-responsive mt-4">
+            <table class="table table-hover table-bordered border-secondary">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Data da Venda</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {% for venda in vendas_pendentes %}
+                  <tr>
+                      <td>
+                          {% if venda.cliente %}
+                              {{ venda.cliente.nome_cliente }}
+                          {% else %}
+                              Sem registro
+                          {% endif %}
+                      </td>
+                      <td>{{ venda.data_venda }}</td>
+                      <td>R$ {{ venda.total|floatformat:2 }}</td>
+                      <td>
+                          <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#confirmModal" data-url="{% url 'vendas:marcar_paga' venda.id %}">
+                              Pagar
+                          </button>
+                      </td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+        </div>
     </main>
 
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Confirmação de Pagamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    Tem certeza de que deseja marcar esta venda como paga?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form id="confirmPaymentForm" method="POST" action="">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Confirmar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  </body>
+    <script>
+        var confirmModal = document.getElementById('confirmModal');
+        confirmModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget; 
+            var url = button.getAttribute('data-url'); 
+            var confirmForm = document.getElementById('confirmPaymentForm');
+            confirmForm.setAttribute('action', url); 
+        });
+    </script>
+</body>
 </html>

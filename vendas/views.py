@@ -10,8 +10,20 @@ from django.utils.timezone import now
 from calendar import monthrange
 from datetime import datetime
 from django.contrib import messages  
+from django.db.models import Q
 
 
+
+class PesquisaProdutoView(View):
+    def get(self, request):
+        query = request.GET.get('busca')
+        produtos = Produto.objects.filter(estado=True)
+        if query:
+            produtos = produtos.filter(Q(nome__icontains=query))
+        
+        return render(request, 'vendas/pesquisa_produtos.html', {
+            'produtos': produtos,
+        })
 
 
 #-------------Pagar Pendencias
@@ -44,10 +56,10 @@ class GerarRelatorioMensalPDF(View):
             total_mes = vendas.aggregate(Sum('total'))['total__sum'] or 0  
 
             context = {
+                'total_mes': total_mes,
                 'ano': ano,
                 'mes': mes,
                 'vendas': vendas,
-                'total_mes': total_mes,
             }
 
             template_path = 'vendas/relatorio_mensal.html'
@@ -119,20 +131,29 @@ class ListaVendas(View):
         return render(request, 'vendas/vendas_list.html', context)
 
 #------------------- Fazer Vendas
+
 class FazerVenda(View):
     def get(self, request):
         clientes = Cliente.objects.filter(estado=True)
-        produtos = Produto.objects.filter(estado=True)
+        
+        # Lógica de pesquisa
+        termo_pesquisa = request.GET.get('busca')
+        if termo_pesquisa:
+            produtos = Produto.objects.filter(estado=True, nome__icontains=termo_pesquisa)
+        else:
+            produtos = Produto.objects.filter(estado=True)
+        
         return render(request, 'vendas/vendas_form.html', {
             'clientes': clientes,
             'produtos': produtos,
+            'termo_pesquisa': termo_pesquisa  
         })
 
     def post(self, request):
         cliente_id = request.POST.get('cliente')
         cliente = None
         if cliente_id:
-            cliente = get_object_or_404(Cliente, id=cliente_id)  # Cliente opcional
+            cliente = get_object_or_404(Cliente, id=cliente_id)
         
         produtos = Produto.objects.filter(estado=True)
         itens_venda = []
@@ -157,7 +178,6 @@ class FazerVenda(View):
             'itens_venda': itens_venda,
             'total': total
         })
-
 
 #-------------------Tela de Confirmar Vendas
 class ConfirmarVenda(View):

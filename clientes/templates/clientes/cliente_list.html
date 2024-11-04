@@ -13,11 +13,19 @@
   
     {% include "navbar.html" %}
 
-    <main class="container mt-5">
+    <main class="container mt-4">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3">Clientes</h1>
-        <a href="{% url 'clientes:adicionarcliente' %}" class="btn btn-success">Adicionar Novo Cliente</a>
-      </div>
+    
+        <div class="d-flex ms-auto">
+            <form class="d-flex" method="GET" action="#">
+                <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar" name="busca">
+                <button class="btn btn-dark" type="submit">Pesquisar</button> 
+            </form>
+    
+            <a href="{% url 'clientes:adicionarcliente' %}" class="btn btn-success ms-3">Adicionar Novo Cliente</a>
+        </div>
+    </div>
 
       <div class="table-responsive">
         <table class="table table-hover table-bordered border-secondary">
@@ -35,9 +43,9 @@
               {% for cliente in cliente_list %}
             <tr id="cliente-{{ cliente.pk }}">
               <td>{{ cliente.nome_cliente }}</td>
-              <td>{{ cliente.cpf }}</td>
-              <td>{{ cliente.telefone }}</td>
-              <td>{{ cliente.email }}</td>
+              <td>{{ cliente.cpf|default_if_none:"" }}</td>
+              <td>{{ cliente.telefone|default_if_none:"" }}</td>
+              <td>{{ cliente.email|default_if_none:"" }}</td>
               <td>
                 <a href="{% url 'clientes:editarcliente' pk=cliente.pk %}" class="btn btn-success btn-sm">
                   <img src="{% static 'icons/editar.png' %}" alt="Editar" style="width: 20px; height: 20px;">

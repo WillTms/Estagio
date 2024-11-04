@@ -16,7 +16,7 @@ class Cliente(models.Model):
 
     def clean(self):
         mensagem_erro = {}
-
+    
         if not valida_cpf(self.cpf):
             mensagem_erro['cpf'] = 'Digite um CPF válido'
             
