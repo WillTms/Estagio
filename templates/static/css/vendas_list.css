@@ -31,3 +31,25 @@ h1 {
       background-color: #ececec;
       color: black !important; 
 }
+
+.filter-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-form label {
+    margin: 0;
+    
+}
+
+.filter-form .form-control {
+    width: auto;
+    max-width: 160px;
+}
+
+.filter-form .btn {
+    height: 38px;
+    padding: 0 15px;
+    font-size: 0.9rem;
+}

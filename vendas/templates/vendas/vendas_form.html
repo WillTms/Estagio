@@ -12,34 +12,30 @@
     {% include 'navbar.html' %}
     
     <div class="container mt-4">
-        <!-- Linha para título e botão de pesquisa -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Efetuar Venda</h1>
             
-            <!-- Formulário de pesquisa com GET separado -->
+            <!-- GET -->
             <form method="get" action="{% url 'vendas:venda_create' %}" class="d-flex">
                 <input class="form-control me-2" type="search" placeholder="Pesquisar Produto" aria-label="Pesquisar" name="busca" value="{{ termo_pesquisa|default_if_none:""  }}" style="width: 250px;">
                 <button class="btn btn-dark" type="submit">Pesquisar</button>
             </form>
         </div>
 
-        <!-- Formulário principal de venda com POST -->
+        <!-- POST -->
         <form method="post" action="{% url 'vendas:venda_create' %}">
             {% csrf_token %}
-            <div class="mb-3">
-                <label for="cliente" class="form-label">Cliente referente à venda</label>
-                <select class="form-select" id="cliente" name="cliente">
-                    <option value="" disabled selected>Selecione o Cliente (opcional)</option>
-                    {% for cliente in clientes %}
-                        <option value="{{ cliente.id }}">{{ cliente.nome_cliente }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <!-- Linha para título "Produtos" e botão "Pré-visualizar Venda" -->
-            <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
-                <h2 class="mb-0">Produtos</h2>
-                <button type="submit" class="btn btn-success">Pré-visualizar Venda</button>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Produtos</h2>
+                <div class="d-flex gap-2">
+                    <select class="form-select cliente-select" id="cliente" name="cliente" style="width: 300px;">
+                        <option value="" disabled selected>Selecione o Cliente (opcional)</option>
+                        {% for cliente in clientes %}
+                            <option value="{{ cliente.id }}">{{ cliente.nome_cliente }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-success btn-preview">Pré-visualizar Venda</button>
+                </div>
             </div>
 
             <div class="table-responsive mt-3">

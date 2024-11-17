@@ -10,3 +10,31 @@ body {
       background-color: #ececec;
       color: black !important; 
 }
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.title-section {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.action-section {
+  display: flex;
+  gap: 10px;
+}
+
+.cliente-select {
+  width: 250px;
+  height: 40px;
+  font-size: 1rem;
+}
+
+.btn-preview {
+  height: 40px;
+  font-size: 1rem;
+}

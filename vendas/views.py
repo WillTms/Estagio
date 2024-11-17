@@ -136,7 +136,6 @@ class FazerVenda(View):
     def get(self, request):
         clientes = Cliente.objects.filter(estado=True)
         
-        # Lógica de pesquisa
         termo_pesquisa = request.GET.get('busca')
         if termo_pesquisa:
             produtos = Produto.objects.filter(estado=True, nome__icontains=termo_pesquisa)
@@ -187,18 +186,17 @@ class ConfirmarVenda(View):
         if cliente_id:
             cliente = get_object_or_404(Cliente, id=cliente_id)
 
-        status_venda = request.POST.get('status')  # Status da venda (paga ou pendente)
+        status_venda = request.POST.get('status') 
 
-        # Se o cliente não estiver registrado e o status for pendente, exibir mensagem de erro
         if not cliente and status_venda == 'pendente':
             messages.error(request, "Apenas clientes registrados podem deixar a venda pendente.")
-            return redirect('vendas:venda_preview')  # Redireciona para pré-visualização (ajuste a URL conforme necessário)
+            return redirect('vendas:venda_preview')  
 
         valor_final = request.POST.get('valor_final')
         if valor_final:
             valor_final = float(valor_final)
         else:
-            valor_final = None  # Define como None se o campo não foi preenchido
+            valor_final = None  
 
         venda = Venda(cliente=cliente)
         venda.save()
@@ -219,13 +217,12 @@ class ConfirmarVenda(View):
                 item_venda.save()
                 total += item_venda.get_subtotal()
 
-        # Se valor_final for None, usa o total calculado
         venda.total = valor_final if valor_final else total
         venda.status = status_venda
         venda.save()
 
         if status_venda == 'paga':
-            return redirect('vendas:venda_list')  # Redireciona para a lista de vendas pagas
+            return redirect('vendas:venda_list')  
         else:
-            return redirect('vendas:lista_pendentes')  # Redireciona para a lista de vendas pendentes
+            return redirect('vendas:lista_pendentes')  
 
